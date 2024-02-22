@@ -70,7 +70,7 @@ function GameController(playerOne = "Player One", playerTwo = "Player Two") {
     ];
 
     let currentPlayer = players[0];
-
+    let winner = "";
     const switchPlayer = () => {
         currentPlayer = currentPlayer == players[0] ? players[1] : players[0];
     }
@@ -121,7 +121,8 @@ function GameController(playerOne = "Player One", playerTwo = "Player Two") {
     printNewRound();
     return {
         playRound,
-        getCurrentPlayer
+        getCurrentPlayer,
+        getBoard: board.getBoard
     }
 }
 
