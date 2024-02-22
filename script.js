@@ -63,7 +63,7 @@ function Gameboard() {
 
 function GameController(playerOne = "Player One", playerTwo = "Player Two") {
     const board = Gameboard();
-    console.log(board, "board");
+    let turns = 0;
     const players = [
         Player(playerOne, "X"),
         Player(playerTwo, "O")
@@ -83,12 +83,41 @@ function GameController(playerOne = "Player One", playerTwo = "Player Two") {
     }
 
     const playRound = (idx1, idx2) => {
+        if(winner) {
+            board.printBoard();
+            console.log(`${currentPlayer.name} already won!! please start a new game.`);
+            return;
+        }
         board.dropToken(currentPlayer.symbol, idx1 , idx2);
+        turns++;
         console.log(currentPlayer.name + ` marking ${idx1}, ${idx2} with ${currentPlayer.symbol}`);
         printNewRound();
+        if(turns > 4) {
+            if(checkWinner(board.getBoard(), currentPlayer.symbol)) {
+                console.log("-----------------------");
+                console.log(`${currentPlayer.name} wins`);
+                winner = currentPlayer.name;
+                return;
+            }
+        }
         switchPlayer();
     }
 
+    const checkWinner = (currentBoard, symbol) => {
+        for(let i = 0; i < 3; i++) {
+            if((currentBoard[i][0].getToken() == symbol && currentBoard[i][1].getToken() == symbol && currentBoard[i][2].getToken() == symbol) ||
+            (currentBoard[0][i].getToken() == symbol && currentBoard[1][i].getToken() == symbol && currentBoard[2][i].getToken() == symbol)) {
+                return true;
+            }
+
+            if((currentBoard[0][0].getToken() == symbol && currentBoard[1][1].getToken() == symbol && currentBoard[2][2].getToken() == symbol) ||
+            (currentBoard[0][2].getToken() == symbol && currentBoard[1][1].getToken() == symbol && currentBoard[2][0].getToken() == symbol)) {
+                return true;
+            }
+            
+            return false;
+        }
+    }
     printNewRound();
     return {
         playRound,
